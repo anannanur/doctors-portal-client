@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import footer from '../../assets/images/footer.png';
+import footer from '../../../assets/images/footer.png';
 
 const Footer = () => {
     return (
@@ -29,7 +29,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className='text-center pt-20'>
-                <p>Copyright 2022 All Rights Reserved</p>
+                <p>Copyright &copy; {new Date().getFullYear()} All Rights Reserved</p>
             </div>
 
         </footer>
