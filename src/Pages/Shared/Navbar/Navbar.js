@@ -1,22 +1,31 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import auth from '../../../firebase.init';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Navbar = () => {
+
+    const [user] = useAuthState(auth);
+    const logout = () => {
+        signOut(auth);
+    };
     const menuItems =
-        <><li className='hover:bg-primary'><Link to="/">Home</Link></li>
-            <li className='hover:bg-primary'>
-                <Link to="/about">
+        <><li><NavLink to="/">Home</NavLink></li>
+            <li>
+                <NavLink to="/about">
                     About
-                </Link>
+                </NavLink>
             </li>
-            <li className='hover:bg-primary'><Link to="/appointment">Appointments</Link></li>
-            <li className='hover:bg-primary'><Link to="/">Contact Us</Link></li>
-            <li className='hover:bg-primary'><Link to="/">Login</Link></li>
-            <li className='hover:bg-primary'><Link to="/">Reviews</Link></li>
+            <li><NavLink to="/appointment">Appointments</NavLink></li>
+            {user && <li><NavLink to="/dashboard">Dashboard</NavLink></li>}
+            <li><NavLink to="/contact">Contact Us</NavLink></li>
+            <li>{user ? <button onClick={logout}>Sign Out</button> : <NavLink to="/login">Login</NavLink>}</li>
+            <li><NavLink to="/reviews">Reviews</NavLink></li>
         </>
     return (
         <div>
-            <div className="navbar bg-base-100 px-28">
+            <div className="navbar bg-base-100 px-10">
                 <div className="navbar-start">
                     <div className="dropdown">
                         <label tabIndex="0" className="btn btn-ghost lg:hidden">
@@ -26,9 +35,9 @@ const Navbar = () => {
                             {menuItems}
                         </ul>
                     </div>
-                    <Link to="/" className="btn btn-ghost normal-case text-xl">Doctors Portal</Link>
+                    <NavLink to="/" className="btn btn-ghost normal-case text-xl">Doctors Portal</NavLink>
                 </div>
-                <div className="navbar-end hidden lg:flex">
+                <div className="navbar-end hidden lg:flex bg-base-100">
                     <ul className="menu menu-horizontal p-0">
                         {menuItems}
                     </ul>
