@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
 import { useForm } from "react-hook-form";
 import Loading from '../Shared/Loading/Loading';
 import { Link, useNavigate } from 'react-router-dom';
+import useToken from '../../Hooks/useToken';
 
 
 const SignUp = () => {
@@ -19,11 +20,18 @@ const SignUp = () => {
     ] = useCreateUserWithEmailAndPassword(auth);
 
     const [updateProfile, updating, updateError] = useUpdateProfile(auth);
+    const [token] = useToken(user || gUser);
     const navigate = useNavigate();
 
-    if (user || gUser) {
-        console.log(user || gUser);
-    }
+    // if (user || gUser) {
+    //     console.log(user || gUser);
+    // }
+    
+    useEffect(()=>{
+        if (token) {       
+            navigate('/appointment');
+        }
+    },[token,navigate]);
 
     if (gError || error || updateError) {
         signUpError = <p className='text-red-600 my-2 font-semibold'><small>{gError?.message || error?.message || updateError?.message}</small></p>
@@ -37,7 +45,7 @@ const SignUp = () => {
         await createUserWithEmailAndPassword(data.email, data.password);
         await updateProfile({ displayName: data.name });
         alert('Updated profile');
-        navigate('/appointment');
+        // navigate('/appointment');
     }
 
     return (
